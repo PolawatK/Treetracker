@@ -5,38 +5,37 @@
   width: 100%;
 }
 
-/* ส่วนบน (dropdown) */
 .top-panel {
-  background-color: #f8fff5;
+  background: #f7fff5;
+  padding: 10px;
   border-bottom: 1px solid #cfe3c0;
-  padding: 10px 15px;
-  font-size: 16px;
-  font-weight: 500;
 }
 
-/* ส่วนกลาง (แผนที่) */
+button {
+  margin-left: 8px;
+  padding: 5px 12px;
+  background-color: #388E3C;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+button[disabled] {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
 .map-section {
   flex: 1;
-  height: 100%;
   position: relative;
+  min-height: 500px;
 }
 
-/* ส่วนล่าง (ข้อมูลหรือข้อความ) */
-.bottom-panel {
-  background-color: #f1f1f1;
-  text-align: center;
-  padding: 10px;
-  font-size: 14px;
-  color: #555;
+google-map {
+  display: block;
+  height: 100% !important;
+  width: 100% !important;
 }
 
-/* Responsive design สำหรับมือถือ */
-@media (max-width: 768px) {
-  .top-panel {
-    font-size: 14px;
-  }
-
-  .bottom-panel {
-    font-size: 12px;
-  }
-}

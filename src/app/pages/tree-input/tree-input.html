@@ -1,0 +1,32 @@
+<div class="form-container">
+  <h2>🪴 บันทึกข้อมูลต้นไม้ใหม่</h2>
+
+  <form (ngSubmit)="addTree()" #treeForm="ngForm">
+    <label>ชื่อเรียกต้นไม้</label>
+    <input type="text" [(ngModel)]="treeData.name" name="name" required>
+
+    <label>พันธุ์ไม้</label>
+    <input type="text" [(ngModel)]="treeData.species" name="species" required>
+
+    <label>เส้นรอบวง (ซม.)</label>
+    <input type="number" [(ngModel)]="treeData.circumference" name="circumference">
+
+    <label>ความสูง (เมตร)</label>
+    <input type="number" [(ngModel)]="treeData.height" name="height">
+
+    <label>พิกัดละติจูด (Latitude)</label>
+    <input type="number" [(ngModel)]="treeData.latitude" name="latitude" step="0.000001" readonly>
+
+    <label>พิกัดลองจิจูด (Longitude)</label>
+    <input type="number" [(ngModel)]="treeData.longitude" name="longitude" step="0.000001" readonly>
+
+    <button type="button" (click)="getCurrentLocation()" [disabled]="locating">
+      {{ locating ? "📡 กำลังดึงพิกัด..." : "📍 ดึงพิกัดจาก GPS" }}
+    </button>
+
+    <button type="submit" [disabled]="!treeForm.form.valid || locating">💾 บันทึกข้อมูล</button>
+  </form>
+
+  <p class="success" *ngIf="successMsg">{{ successMsg }}</p>
+  <p class="error" *ngIf="errorMsg">{{ errorMsg }}</p>
+</div>

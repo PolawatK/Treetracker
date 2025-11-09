@@ -1,30 +1,69 @@
 <div class="page-container">
-  
-  <!-- ส่วนที่ 1: แถบเลือกต้นไม้ -->
+
+  <!-- ส่วนที่ 1: แถบเลือกพันธุ์ + ปุ่มควบคุม -->
   <div class="top-panel">
-    <label for="treeSelect">🌳 เลือกต้นไม้:</label>
-    <select id="treeSelect"
-            [(ngModel)]="selectedTreeIndex"
-            (change)="focusOnTree(selectedTreeIndex)">
+    <label for="speciesSelect">🌱 พันธุ์ไม้:</label>
+    <select
+      id="speciesSelect"
+      [(ngModel)]="selectedSpecies"
+      (change)="onSpeciesChange()">
+      <option [ngValue]="null">-- ทุกพันธุ์ --</option>
+      <option *ngFor="let s of speciesList" [ngValue]="s">{{ s }}</option>
+    </select>
+
+    <label for="treeSelect" style="margin-left:10px;">🌳 ต้นไม้:</label>
+    <select
+      id="treeSelect"
+      [(ngModel)]="selectedTreeIndex"
+      (change)="focusOnTree(selectedTreeIndex)">
       <option [ngValue]="null">-- ทั้งหมด --</option>
-      <option *ngFor="let tree of trees; let i = index" [ngValue]="i">
-        {{ tree.name }} ({{ tree.species }})
+      <option *ngFor="let tree of filteredTrees; let i = index" [ngValue]="i">
+        {{ tree.name }}
       </option>
     </select>
+
+    <!-- ปุ่มวาด Polygon -->
+    <button (click)="startDrawing()">✏️ เริ่มวาด</button>
+    <button (click)="finishDrawing()" [disabled]="drawingPoints.length < 3">✅ ปิดพื้นที่</button>
+    <button (click)="clearDrawing()">🗑️ ล้าง</button>
   </div>
 
   <!-- ส่วนที่ 2: แผนที่ -->
   <div class="map-section">
     <google-map
+      #map
       height="100%"
       width="100%"
       [center]="center"
       [zoom]="zoom"
-      [options]="mapOptions">
+      [options]="mapOptions"
+      (mapClick)="onMapClick($event)">
 
-      <!-- Marker ทั้งหมด -->
+      <!-- เส้น Polyline -->
+      <!-- เส้นขณะวาด -->
+<map-polyline
+  *ngIf="drawingPoints.length > 0 && !polygonComplete"
+  [path]="drawingPoints"
+  [options]="{ strokeColor: '#00AA00', strokeWeight: 3 }">
+</map-polyline>
+
+<!-- พื้นที่เมื่อปิด polygon -->
+<map-polygon
+  *ngIf="polygonComplete"
+  [paths]="drawingPoints"
+  [options]="{
+    strokeColor: '#006400',
+    strokeWeight: 2,
+    fillColor: '#66FF66',
+    fillOpacity: 0.25
+  }">
+</map-polygon>
+
+
+
+      <!-- เเสดงต้นไม้-->
       <map-marker
-        *ngFor="let tree of trees"
+        *ngFor="let tree of filteredTrees"
         #marker="mapMarker"
         [position]="{ lat: tree.latitude, lng: tree.longitude }"
         [options]="{
@@ -36,6 +75,7 @@
         (mapClick)="openInfoWindow(marker, tree)">
       </map-marker>
 
+      <!-- Info Window -->
       <map-info-window #infoWindow>
         <div *ngIf="activeTree">
           <h3>{{ activeTree.name }}</h3>
@@ -45,12 +85,6 @@
         </div>
       </map-info-window>
     </google-map>
-  </div>
-
-  <!-- ส่วนที่ 3: รายละเอียดเพิ่มเติม -->
-  <div class="bottom-panel">
-    <p>🪴 ระบบบันทึกข้อมูลต้นไม้ในประเทศไทย (Tree Tracker)</p>
-    <p>Powered by Angular + Firebase</p>
   </div>
 
 </div>
