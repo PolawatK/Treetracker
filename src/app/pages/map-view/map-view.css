@@ -1,0 +1,42 @@
+.page-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100%;
+}
+
+/* ส่วนบน (dropdown) */
+.top-panel {
+  background-color: #f8fff5;
+  border-bottom: 1px solid #cfe3c0;
+  padding: 10px 15px;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+/* ส่วนกลาง (แผนที่) */
+.map-section {
+  flex: 1;
+  height: 100%;
+  position: relative;
+}
+
+/* ส่วนล่าง (ข้อมูลหรือข้อความ) */
+.bottom-panel {
+  background-color: #f1f1f1;
+  text-align: center;
+  padding: 10px;
+  font-size: 14px;
+  color: #555;
+}
+
+/* Responsive design สำหรับมือถือ */
+@media (max-width: 768px) {
+  .top-panel {
+    font-size: 14px;
+  }
+
+  .bottom-panel {
+    font-size: 12px;
+  }
+}

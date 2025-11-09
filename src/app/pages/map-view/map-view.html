@@ -1,0 +1,56 @@
+<div class="page-container">
+  
+  <!-- ส่วนที่ 1: แถบเลือกต้นไม้ -->
+  <div class="top-panel">
+    <label for="treeSelect">🌳 เลือกต้นไม้:</label>
+    <select id="treeSelect"
+            [(ngModel)]="selectedTreeIndex"
+            (change)="focusOnTree(selectedTreeIndex)">
+      <option [ngValue]="null">-- ทั้งหมด --</option>
+      <option *ngFor="let tree of trees; let i = index" [ngValue]="i">
+        {{ tree.name }} ({{ tree.species }})
+      </option>
+    </select>
+  </div>
+
+  <!-- ส่วนที่ 2: แผนที่ -->
+  <div class="map-section">
+    <google-map
+      height="100%"
+      width="100%"
+      [center]="center"
+      [zoom]="zoom"
+      [options]="mapOptions">
+
+      <!-- Marker ทั้งหมด -->
+      <map-marker
+        *ngFor="let tree of trees"
+        #marker="mapMarker"
+        [position]="{ lat: tree.latitude, lng: tree.longitude }"
+        [options]="{
+          icon: {
+            url: 'https://emojicdn.elk.sh/🌳',
+            scaledSize: size
+          }
+        }"
+        (mapClick)="openInfoWindow(marker, tree)">
+      </map-marker>
+
+      <map-info-window #infoWindow>
+        <div *ngIf="activeTree">
+          <h3>{{ activeTree.name }}</h3>
+          <p>🌱 {{ activeTree.species }}</p>
+          <p>📏 รอบลำต้น: {{ activeTree.circumference }} ซม.</p>
+          <p>🌳 สูง: {{ activeTree.height }} ม.</p>
+        </div>
+      </map-info-window>
+    </google-map>
+  </div>
+
+  <!-- ส่วนที่ 3: รายละเอียดเพิ่มเติม -->
+  <div class="bottom-panel">
+    <p>🪴 ระบบบันทึกข้อมูลต้นไม้ในประเทศไทย (Tree Tracker)</p>
+    <p>Powered by Angular + Firebase</p>
+  </div>
+
+</div>
